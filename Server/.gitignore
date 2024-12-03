@@ -1,0 +1,13 @@
+# server
+
+# dependencies
+.env
+/node_modules
+
+# Ignore everything in uploads and sessions folders
+/public/uploads/*
+/public/sessions/*
+
+# Except the folders themselves
+!/public/uploads
+!/public/sessions

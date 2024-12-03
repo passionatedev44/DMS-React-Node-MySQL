@@ -1,0 +1,5 @@
+# client
+
+# dependencies
+.env
+/node_modules

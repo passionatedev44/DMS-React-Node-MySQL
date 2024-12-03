@@ -1,0 +1,22 @@
+{
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "body-parser": "^1.20.2",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "firebase": "^10.12.3",
+        "fs": "^0.0.1-security",
+        "jsonwebtoken": "^9.0.2",
+        "multer": "^1.4.5-lts.1",
+        "mysql2": "^3.10.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.7"
+    },
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    }
+}
