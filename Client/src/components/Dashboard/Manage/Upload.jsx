@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import CreatableSelect from 'react-select/creatable';
-import { Oval } from 'react-loader-spinner'
-import { fetchUploadTags } from '../ApiHandler/tagsFunctions';
-import { fetchDocTypes } from '../ApiHandler/artifactsFunctions';
-import { handleDocumentSubmit } from '../ApiHandler/uploadFunctions';
-import { fetchFileUploadLimit, fetchAllocatedUsedSpace } from '../ApiHandler/settingsFunctions'
+import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import CreatableSelect from "react-select/creatable";
+import { Oval } from "react-loader-spinner";
+import { fetchUploadTags } from "../ApiHandler/tagsFunctions";
+import { fetchDocTypes } from "../ApiHandler/artifactsFunctions";
+import { handleDocumentSubmit } from "../ApiHandler/uploadFunctions";
+import {
+    fetchFileUploadLimit,
+    fetchAllocatedUsedSpace,
+} from "../ApiHandler/settingsFunctions";
 
 const UploadDocument = () => {
     const [limit, setLimit] = useState("");
@@ -21,7 +24,7 @@ const UploadDocument = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchFileUploadLimit(setLimit, null, null, null)
+        fetchFileUploadLimit(setLimit, null, null, null);
         fetchAllocatedUsedSpace(null, null, setRemainingSpace, null, null);
         fetchUploadTags(setAvailableTags);
         fetchDocTypes(setDocTypes);
@@ -31,7 +34,7 @@ const UploadDocument = () => {
     const handleTagChange = (newValue, setTags) => {
         if (newValue.length > 10) {
             toast.warn("You can only add up to 10 tags.", {
-                position: "top-center"
+                position: "top-center",
             });
             return;
         }
@@ -48,12 +51,48 @@ const UploadDocument = () => {
             <ToastContainer />
             <header className="upload-document-header">
                 <h1>Upload Document</h1>
-                {loading ? <Oval height="22" width="22" color="blue" ariaLabel="loading" /> : ''}
+                {loading ? (
+                    <Oval
+                        height="22"
+                        width="22"
+                        color="blue"
+                        ariaLabel="loading"
+                    />
+                ) : (
+                    ""
+                )}
             </header>
-            <form className="upload-document-form" onSubmit={(e) => handleDocumentSubmit(e, limit, remainingSpace, setLoading, file, tags, docType, description, publish, setFile, setTags, setDocType, setDescription, setPublish, availableTags)}>
+            <form
+                className="upload-document-form"
+                onSubmit={(e) =>
+                    handleDocumentSubmit(
+                        e,
+                        limit,
+                        remainingSpace,
+                        setLoading,
+                        file,
+                        tags,
+                        docType,
+                        description,
+                        publish,
+                        setFile,
+                        setTags,
+                        setDocType,
+                        setDescription,
+                        setPublish,
+                        availableTags
+                    )
+                }
+            >
                 <div className="form-group">
                     <label>Upload File</label>
-                    <input type="file" onChange={(e) => { setFile(e.target.files[0]) }} required />
+                    <input
+                        type="file"
+                        onChange={(e) => {
+                            setFile(e.target.files[0]);
+                        }}
+                        required
+                    />
                     <small>Allowed File Size: {kbToMb(limit)} MB</small>
                 </div>
                 <div className="form-group">
@@ -61,7 +100,9 @@ const UploadDocument = () => {
                     <CreatableSelect
                         isMulti
                         value={tags}
-                        onChange={(newValue) => handleTagChange(newValue, setTags)}
+                        onChange={(newValue) =>
+                            handleTagChange(newValue, setTags)
+                        }
                         options={availableTags}
                         placeholder="Select or create tags"
                         required
@@ -69,7 +110,11 @@ const UploadDocument = () => {
                 </div>
                 <div className="form-group">
                     <label>Document Type</label>
-                    <select value={docType} onChange={(e) => setDocType(e.target.value)} required>
+                    <select
+                        value={docType}
+                        onChange={(e) => setDocType(e.target.value)}
+                        required
+                    >
                         <option value="">Select</option>
                         {docTypes.map((type) => (
                             <option key={type.id} value={type.id}>
@@ -85,7 +130,8 @@ const UploadDocument = () => {
                         maxLength="500"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        required />
+                        required
+                    />
                     <small>Max length 500 Char</small>
                 </div>
                 <div className="form-group">
@@ -95,7 +141,7 @@ const UploadDocument = () => {
                             <input
                                 type="radio"
                                 value="no"
-                                checked={publish === 'no'}
+                                checked={publish === "no"}
                                 onChange={(e) => setPublish(e.target.value)}
                             />
                             No
@@ -104,7 +150,7 @@ const UploadDocument = () => {
                             <input
                                 type="radio"
                                 value="yes"
-                                checked={publish === 'yes'}
+                                checked={publish === "yes"}
                                 onChange={(e) => setPublish(e.target.value)}
                             />
                             Yes
@@ -112,18 +158,45 @@ const UploadDocument = () => {
                     </div>
                 </div>
                 <div className="form-group">
-                    <button type="submit" disabled={loading}>{loading ? 'Uploading...' : 'Upload'}</button>
+                    <button type="submit" disabled={loading}>
+                        {loading ? "Uploading..." : "Upload"}
+                    </button>
                 </div>
             </form>
             <div className="usage-instructions">
                 <h2>📢 Usage Instructions</h2>
                 <ul>
-                    <li><i className='bx bx-paper-plane'></i> You may select existing tag(s) for your document. If no suitable tag available then key in a new tag and hit enter.</li>
-                    <li><i className='bx bx-paper-plane'></i> You may select a maximum of 10 tags per document.</li>
-                    <li><i className='bx bx-paper-plane'></i> You may choose to 'Publish' the document at this stage. By default, the document would remain in Unpublished state.</li>
-                    <li><i className='bx bx-paper-plane'></i> You need to 'Publish' the document to be search-ready for the end user. You may Publish / Unpublish any document later as well.</li>
-                    <li><i className='bx bx-paper-plane'></i> To manage (publish/unpublish/archive/restore) artifacts, click here or go to Manage Artifacts.</li>
-                    <li><i className='bx bx-paper-plane'></i> Allowed file document formats are 'jpg', 'png', 'jpeg', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'csv', 'ppt', 'pptx', 'txt'.</li>
+                    <li>
+                        <i className="bx bx-paper-plane"></i> You may select
+                        existing tag(s) for your document. If no suitable tag
+                        available then key in a new tag and hit enter.
+                    </li>
+                    <li>
+                        <i className="bx bx-paper-plane"></i> You may select a
+                        maximum of 10 tags per document.
+                    </li>
+                    <li>
+                        <i className="bx bx-paper-plane"></i> You may choose to
+                        'Publish' the document at this stage. By default, the
+                        document would remain in Unpublished state.
+                    </li>
+                    <li>
+                        <i className="bx bx-paper-plane"></i> You need to
+                        'Publish' the document to be search-ready for the end
+                        user. You may Publish / Unpublish any document later as
+                        well.
+                    </li>
+                    <li>
+                        <i className="bx bx-paper-plane"></i> To manage
+                        (publish/unpublish/archive/restore) artifacts, click
+                        here or go to Manage Artifacts.
+                    </li>
+                    <li>
+                        <i className="bx bx-paper-plane"></i> Allowed file
+                        document formats are 'jpg', 'png', 'jpeg', 'doc',
+                        'docx', 'xls', 'xlsx', 'zip', 'csv', 'ppt', 'pptx',
+                        'txt'.
+                    </li>
                 </ul>
             </div>
         </div>

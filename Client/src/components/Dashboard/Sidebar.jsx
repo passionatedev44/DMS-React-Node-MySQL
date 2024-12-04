@@ -346,7 +346,7 @@ const Sidebar = ({
                                     </span>
                                 </a>
                             </li>
-                            <li
+                            {/* <li
                                 className={
                                     active === "controlAccess" ? "active" : ""
                                 }
@@ -362,7 +362,7 @@ const Sidebar = ({
                                     <i className="bx bx-street-view"></i>
                                     <span className="text">Control Access</span>
                                 </a>
-                            </li>
+                            </li> */}
                             <li
                                 className={
                                     active === "defineDocumentType"

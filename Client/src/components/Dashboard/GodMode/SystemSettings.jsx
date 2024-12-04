@@ -1,14 +1,21 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { fetchFileUploadLimit, updateFileUploadLimit, fetchAllocatedUsedSpace, updateAllocatedSpace, fetchDocFormats, updateDocFormatControl } from '../ApiHandler/settingsFunctions'
+import React from "react";
+import { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+    fetchFileUploadLimit,
+    updateFileUploadLimit,
+    fetchAllocatedUsedSpace,
+    updateAllocatedSpace,
+    fetchDocFormats,
+    updateDocFormatControl,
+} from "../ApiHandler/settingsFunctions";
 
 const SystemSettings = () => {
-    const [limit, setLimit] = useState("");  // File upload size limit
+    const [limit, setLimit] = useState(""); // File upload size limit
     const [newLimit, setNewLimit] = useState("");
-    const [updatedBy, setUpdatedBy] = useState("");  // Who updated the system settings
-    const [lastUpdated, setLastUpdated] = useState("");  // Time at which system settings updated
+    const [updatedBy, setUpdatedBy] = useState(""); // Who updated the system settings
+    const [lastUpdated, setLastUpdated] = useState(""); // Time at which system settings updated
     const [allowedToChange, setAllowedToChange] = useState("");
     const [totalAllocatedSpace, setTotalAllocatedSpace] = useState("");
     const [spaceLastUpdated, setSpaceLastUpdated] = useState("");
@@ -18,12 +25,23 @@ const SystemSettings = () => {
 
     useEffect(() => {
         fetchDocFormats(setDocFormats);
-        fetchFileUploadLimit(setLimit, setUpdatedBy, setLastUpdated, setAllowedToChange)
+        fetchFileUploadLimit(
+            setLimit,
+            setUpdatedBy,
+            setLastUpdated,
+            setAllowedToChange
+        );
         setNewLimit(limit);
     }, [limit]);
 
     useEffect(() => {
-        fetchAllocatedUsedSpace(setTotalAllocatedSpace, null, null, setSpaceLastUpdated, setSpaceUpdatedBy);
+        fetchAllocatedUsedSpace(
+            setTotalAllocatedSpace,
+            null,
+            null,
+            setSpaceLastUpdated,
+            setSpaceUpdatedBy
+        );
         setNewAllocateSpace(totalAllocatedSpace);
     }, [totalAllocatedSpace]);
 
@@ -70,13 +88,37 @@ const SystemSettings = () => {
                                         <input
                                             type="text"
                                             value={newLimit}
-                                            onChange={(e) => setNewLimit(e.target.value)}
+                                            onChange={(e) =>
+                                                setNewLimit(e.target.value)
+                                            }
                                         />
                                     </td>
-                                    <td><p>The limit is in Kb, calculate the equivalent value in MB. 1 MB = 1024 KB</p></td>
-                                    <td className="date">{lastUpdated.split('T')[0]}</td>
-                                    <td><p>{updatedBy}</p></td>
-                                    <td>{allowedToChange === 'Y' && <button onClick={() => updateFileUploadLimit(newLimit)}>Update</button>}</td>
+                                    <td>
+                                        <p>
+                                            The limit is in Kb, calculate the
+                                            equivalent value in MB. 1 MB = 1024
+                                            KB
+                                        </p>
+                                    </td>
+                                    <td className="date">
+                                        {lastUpdated.split("T")[0]}
+                                    </td>
+                                    <td>
+                                        <p>{updatedBy}</p>
+                                    </td>
+                                    <td>
+                                        {allowedToChange === "Y" && (
+                                            <button
+                                                onClick={() =>
+                                                    updateFileUploadLimit(
+                                                        newLimit
+                                                    )
+                                                }
+                                            >
+                                                Update
+                                            </button>
+                                        )}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Total Space Alloacted</td>
@@ -84,13 +126,36 @@ const SystemSettings = () => {
                                         <input
                                             type="text"
                                             value={newAllocateSpace}
-                                            onChange={(e) => setNewAllocateSpace(e.target.value)}
+                                            onChange={(e) =>
+                                                setNewAllocateSpace(
+                                                    e.target.value
+                                                )
+                                            }
                                         />
                                     </td>
-                                    <td><p>This is the total alloacted space to the application instance in GB</p></td>
-                                    <td className="date">{spaceLastUpdated.split('T')[0]}</td>
-                                    <td><p>{spaceUpdatedBy}</p></td>
-                                    <td><button onClick={() => updateAllocatedSpace(newAllocateSpace)}>Update</button></td>
+                                    <td>
+                                        <p>
+                                            This is the total allocated space to
+                                            the application instance in GB
+                                        </p>
+                                    </td>
+                                    <td className="date">
+                                        {spaceLastUpdated.split("T")[0]}
+                                    </td>
+                                    <td>
+                                        <p>{spaceUpdatedBy}</p>
+                                    </td>
+                                    <td>
+                                        <button
+                                            onClick={() =>
+                                                updateAllocatedSpace(
+                                                    newAllocateSpace
+                                                )
+                                            }
+                                        >
+                                            Update
+                                        </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -110,12 +175,22 @@ const SystemSettings = () => {
                                         {chunk.map((format, colIndex) => (
                                             <td key={colIndex}>
                                                 <div className="doc-format-cell">
-                                                    <span>{format.formatName}</span>
+                                                    <span>
+                                                        {format.formatName}
+                                                    </span>
                                                     <label className="switch">
                                                         <input
                                                             type="checkbox"
-                                                            checked={format.controlId === 1}
-                                                            onChange={() => handleToggleChange(format.formatName, format.controlId)}
+                                                            checked={
+                                                                format.controlId ===
+                                                                1
+                                                            }
+                                                            onChange={() =>
+                                                                handleToggleChange(
+                                                                    format.formatName,
+                                                                    format.controlId
+                                                                )
+                                                            }
                                                         />
                                                         <span className="slider round"></span>
                                                     </label>
@@ -123,8 +198,12 @@ const SystemSettings = () => {
                                             </td>
                                         ))}
                                         {/* Fill the remaining cells in the row with empty cells if chunk size is less than 3 */}
-                                        {Array.from({ length: 3 - chunk.length }).map((_, emptyIndex) => (
-                                            <td key={emptyIndex + chunk.length}></td>
+                                        {Array.from({
+                                            length: 3 - chunk.length,
+                                        }).map((_, emptyIndex) => (
+                                            <td
+                                                key={emptyIndex + chunk.length}
+                                            ></td>
                                         ))}
                                     </tr>
                                 ))}
@@ -135,14 +214,30 @@ const SystemSettings = () => {
                 <div className="usage-instructions">
                     <h2>📢 Usage Instructions</h2>
                     <ul>
-                        <li><i className='bx bx-paper-plane'></i> These are the system control settings.</li>
-                        <li><i className='bx bx-paper-plane'></i> Changing the enabled settings, shall impact the functionality of the system.</li>
-                        <li><i className='bx bx-paper-plane'></i> You may not be able to update/change few or all of the settings, depending upon the usage restrictions applied by the administrator.</li>
-                        <li><i className='bx bx-paper-plane'></i> Please go through the description of the respective System variable before updating/changing the current value.</li>
+                        <li>
+                            <i className="bx bx-paper-plane"></i> These are the
+                            system control settings.
+                        </li>
+                        <li>
+                            <i className="bx bx-paper-plane"></i> Changing the
+                            enabled settings, shall impact the functionality of
+                            the system.
+                        </li>
+                        <li>
+                            <i className="bx bx-paper-plane"></i> You may not be
+                            able to update/change few or all of the settings,
+                            depending upon the usage restrictions applied by the
+                            administrator.
+                        </li>
+                        <li>
+                            <i className="bx bx-paper-plane"></i> Please go
+                            through the description of the respective System
+                            variable before updating/changing the current value.
+                        </li>
                     </ul>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 
